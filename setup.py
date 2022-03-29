@@ -11,10 +11,18 @@ with open("README.md", encoding="utf-8") as readme_file:
 
 pipfile = ConfigParser()
 pipfile.read(Path(__file__).parent.resolve() / "Pipfile")
-required = [
-    "{}{}".format(name, version.strip('"')) if version != '"*"' else name
-    for name, version in pipfile["packages"].items()
-]
+
+required = []
+for name, version in pipfile["packages"].items():
+    if version == '"*"':
+        required.append(name)
+    elif "==" in version:
+        required.append("{}{}".format(name, version.strip('"')))
+    elif name == "zappa":
+        required.append("zappa@git+https://github.com/xncbf/zappa@master")
+    else:
+        required.append("{}{}".format(name, version.strip('"')))
+
 test_required = [
     "{}{}".format(name, version.strip('"')) if version != '"*"' else name
     for name, version in pipfile["dev-packages"].items()
