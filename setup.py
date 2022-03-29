@@ -27,7 +27,7 @@ test_required = [
     "{}{}".format(name, version.strip('"')) if version != '"*"' else name
     for name, version in pipfile["dev-packages"].items()
 ]
-
+print(required)
 setup(
     name="zappa",
     version=__version__,
